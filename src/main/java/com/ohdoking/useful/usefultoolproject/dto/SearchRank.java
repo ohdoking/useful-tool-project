@@ -1,5 +1,7 @@
 package com.ohdoking.useful.usefultoolproject.dto;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,5 +22,6 @@ public class SearchRank {
 	@Column(name="search_word")
 	private String searchWord;
 	private String source;
+	private Timestamp date;
 	
 }	
