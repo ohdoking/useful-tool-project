@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,25 +30,30 @@ public class ScheduledTasks {
     @Autowired
 	private SearchRankRepository searchRankRepository;
     
+    @Autowired
+    private Environment env;
+    
     /**
-     * Naver(http://www.naver.com) Top 20 research word crawling 
+     * Naver(http://www.naver.com) Top 20 research word crawling every 1 hour
      */
     //the top of every hour of every day.
     @Scheduled(cron = "0 0 * * * *")
     public void reportCurrentTime() {
-    	String crwaObjectUrl = "http://www.naver.com";
+    	String crwaObjectUrl = env.getProperty("crawl.url");
     	
     	List<SearchRank> items = new ArrayList<SearchRank>();
 
         try {
         	log.info("start crawling {} {}", crwaObjectUrl,  dateFormat.format(new Date()));
+        	
         	Connection connection = Jsoup.connect(crwaObjectUrl);
         	Document htmlDocument = connection.get();
-        	Elements searchRankDivs = htmlDocument.getElementsByClass("ah_roll_area");
+        	
+        	Elements searchRankDivs = htmlDocument.getElementsByClass(env.getProperty("crawl.searchrankdiv"));
         	for(Element searchRankDiv : searchRankDivs) {
-        		for(Element searchRanks : searchRankDiv.getElementsByClass("ah_item")) {
-        			String rank = searchRanks.getElementsByClass("ah_r").get(0).text();
-        			String searchWord = searchRanks.getElementsByClass("ah_k").get(0).text();
+        		for(Element searchRanks : searchRankDiv.getElementsByClass(env.getProperty("crawl.searchrankdiv.item"))) {
+        			String rank = searchRanks.getElementsByClass(env.getProperty("crawl.searchrankdiv.item.rank")).get(0).text();
+        			String searchWord = searchRanks.getElementsByClass(env.getProperty("crawl.searchrankdiv.item.searchword")).get(0).text();
         			
         			SearchRank temp = new SearchRank();
         			temp.setRank(rank);
@@ -60,6 +66,8 @@ public class ScheduledTasks {
         	}
         	
         	searchRankRepository.saveAll(items);
+        	
+        	log.info("end crawling {} {}", crwaObjectUrl,  dateFormat.format(new Date()));
         	
 		} catch (Exception e) {
 			log.error("occur during crawling {} {}",crwaObjectUrl,  dateFormat.format(new Date()));
