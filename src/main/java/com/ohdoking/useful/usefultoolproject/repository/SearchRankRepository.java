@@ -1,7 +1,10 @@
 package com.ohdoking.useful.usefultoolproject.repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -23,4 +26,5 @@ public interface SearchRankRepository extends JpaRepository<SearchRank, Long> {
 	 * @return
 	 */
 	List<SearchRank> findBysearchWordLike(String searchWord, Sort sort);
+	Page<SearchRank> findByDateBetween(Timestamp startDate, Timestamp finishDate, Pageable page);
 }

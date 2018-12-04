@@ -1,5 +1,9 @@
 package com.ohdoking.useful.usefultoolproject.resources;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,25 @@ public class SearchRankResource {
 	@ApiOperation(value = "retrieve All Search Ranks List", notes = "API that retrieve All Search Ranks List.")
 	public Page<SearchRank> retrieveAllSearchRanks(Pageable pageable) {
 		return searchRankRepository.findAll(pageable);
+	}
+	
+	/**
+	 * retrieve Specific date period Search Ranks List!
+	 * 
+	 * @param pageable
+	 * @param startDate startDate(format : yyyyMMDD)
+	 * @param finishDate finishDate(format : yyyyMMDD)
+	 * @return
+	 * @throws ParseException
+	 */
+	@GetMapping("/search")
+	@ApiOperation(value = "retrieve Specific date period Search Ranks List", notes = "API that retrieve Specific date period Search Ranks List.")
+	public Page<SearchRank> retrieveAllSearchRanksWithConditionDate(
+			Pageable pageable, 
+			@RequestParam(defaultValue = "19700101") String startDate, 
+			@RequestParam(defaultValue = "29001230") String finishDate) throws ParseException {
+		DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		return searchRankRepository.findByDateBetween(new Timestamp(formatter.parse(startDate).getTime()), new Timestamp(formatter.parse(finishDate).getTime()), pageable);
 	}
 	
 	@GetMapping("/detail")
