@@ -54,8 +54,8 @@ public class ScheduledTasks {
      * Naver(http://www.naver.com) Top 20 research word crawling every 1 hour
      */
     //the top of every hour of every day.
-    //@Scheduled(cron = "0 0 * * * *")
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(cron = "0 0 * * * *")
+    //@Scheduled(fixedRate = 50000)
     public void reportCurrentTime() {
     	String crwaObjectUrl = env.getProperty("crawl.url");
     	

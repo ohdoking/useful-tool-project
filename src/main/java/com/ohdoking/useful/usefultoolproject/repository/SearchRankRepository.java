@@ -1,5 +1,8 @@
 package com.ohdoking.useful.usefultoolproject.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ohdoking.useful.usefultoolproject.dto.SearchRank;
@@ -12,4 +15,12 @@ import com.ohdoking.useful.usefultoolproject.dto.SearchRank;
  *
  */
 public interface SearchRankRepository extends JpaRepository<SearchRank, Long> {
+	
+	/**
+	 * search like formula using searchWord 
+	 * @param searchWord
+	 * @param sort
+	 * @return
+	 */
+	List<SearchRank> findBysearchWordLike(String searchWord, Sort sort);
 }
