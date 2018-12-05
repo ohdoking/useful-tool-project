@@ -1,4 +1,4 @@
-package com.ohdoking.useful.usefultoolproject.resources;
+package com.ohdoking.useful.usefultoolproject.controller;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -28,9 +28,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(value = "/searchRanks" )
-@Api(value = "SearchRankResource", description = "API related in SearchRank",basePath = "/searchRanks")
-public class SearchRankResource {
+@RequestMapping(value = "/api/searchRanks" )
+@Api(value = "SearchRankController", description = "API related in SearchRank",basePath = "/searchRanks")
+public class SearchRankController {
 	
 	@Autowired
 	private SearchRankRepository searchRankRepository;
@@ -50,6 +50,7 @@ public class SearchRankResource {
 	 * @return
 	 * @throws ParseException
 	 */
+	//TODO find the more good way for defaultvalue
 	@GetMapping("/search")
 	@ApiOperation(value = "retrieve Specific date period Search Ranks List", notes = "API that retrieve Specific date period Search Ranks List.")
 	public Page<SearchRank> retrieveAllSearchRanksWithConditionDate(
