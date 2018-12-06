@@ -26,5 +26,14 @@ public interface SearchRankRepository extends JpaRepository<SearchRank, Long> {
 	 * @return
 	 */
 	List<SearchRank> findBysearchWordLike(String searchWord, Sort sort);
+	
+	/**
+	 * search using Date
+	 * 
+	 * @param startDate startDate
+	 * @param finishDate finishDate
+	 * @param page
+	 * @return
+	 */
 	Page<SearchRank> findByDateBetween(Timestamp startDate, Timestamp finishDate, Pageable page);
 }
